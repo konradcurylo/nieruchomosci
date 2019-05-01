@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<!-- Showcase -->
+<section id="showcase">
+ <div class="container text-center">
+   <div class="home-search p-5">
+     <div class="overlay p-5">
+       <h1 class="display-4 mb-4">
+         Szukanie wymarzonej nieruchomości stało się znacznie łatwiejsze!
+       </h1>
+       <p class="lead">Wprowadź dane do formularza i wyszukaj swoją wymarzoną nieruchomość.</p>
+       <div class="search">
+         <form action="{% url 'search' %}">
+           <!-- Formularz Row 1 -->
+           <div class="form-row">
+             <div class="col-md-4 mb-3">
+               <label class="sr-only">Keywords</label>
+               <input type="text" name="keywords" class="form-control" placeholder="Słowa kluczowe (Basen, Garaż, itd.)">
+             </div>
+
+             <div class="col-md-4 mb-3">
+               <label class="sr-only">Miasto</label>
+               <input type="text" name="city" class="form-control" placeholder="Miasto">
+             </div>
+
+             <div class="col-md-4 mb-3">
+               <label class="sr-only">Województwo</label>
+               <select name="wojewodztwo" class="form-control">
+                <option selected="true" disabled="disabled"> Województwo</option>
+                 {% for key,value in wojewodztwo_wybor.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+           </div>
+           <!-- Formularz Row 2 -->
+           <div class="form-row">
+             <div class="col-md-6 mb-3">
+               <label class="sr-only"> Sypialnie </label>
+               <select name="sypialnie" class="form-control">
+                 <option selected="true" disabled="disabled">Sypialnie</option>
+                 {% for key,value in sypialnie_wybor.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+             <div class="col-md-6 mb-3">
+               <select name="cena" class="form-control" id="type">
+                 <option selected="true" disabled="disabled"> Cena </option>
+                 {% for key,value in cena_wybor.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+           </div>
+           <button class="btn btn-secondary btn-block mt-4" type="submit">Zatwierdź</button>
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
+</section>
+<!-- Alert -->
+<br>
+ {% include 'partials/_alerts.html' %}
+<!-- Oferty -->
+<section id="listings" class="py-5">
+ <div class="container">
+   <h3 class="text-center mb-3">Aktualne oferty</h3>
+   <div class="row">
+    {% if oferty %}
+      {% for oferta in oferty %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card listing-preview">
+            <img class="card-img-top" src="{{oferta.zdjecie_glowne.url}}" alt="">
+            <div class="card-img-overlay">
+              <h2>
+                <span class="badge badge-secondary text-white">{{oferta.cena | intcomma}} PLN</span>
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="listing-heading text-center">
+                <h4 class="text-primary">{{ oferta.tytul }}</h4>
+                <p>
+                  <i class="fas fa-map-marker text-secondary"></i> {{ oferta.miasto }}, {{ oferta.kodpocztowy }}, {{ oferta.wojewodztwo }} </p>
+              </div>
+              <hr>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-th-large"></i> Powierzchnia: {{ oferta.pow_domu }} m2</div>
+                <div class="col-6">
+                  <i class="fas fa-car"></i> Garaż: {{ oferta.garaz }}</div>
+              </div>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-bed"></i> Sypialnie: {{ oferta.sypialnie }}</div>
+                <div class="col-6">
+                  <i class="fas fa-bath"></i> Łazienki: {{ oferta.lazienki }}</div>
+              </div>
+              <hr>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-user"></i> {{ oferta.agent }}</div>
+              </div>
+              <div class="row text-secondary pb-2">
+                <div class="col-6">
+                  <i class="fas fa-clock"></i> {{ oferta.data_oferty | timesince }}</div>
+              </div>
+              <hr>
+             <a href="{% url 'listing' oferta.id  %}" class="btn btn-primary btn-block">Więcej Informacji</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-md-12">
+        <p>Brak nieruchomości</p>
+      </div>
+    {% endif %}
+
+      </div>
+ </div>
+</section>
+
+<section id="services" class="py-5 bg-secondary text-white">
+ <div class="container">
+   <div class="row text-center">
+     <div class="col-md-4">
+       <i class="fas fa-comment fa-4x mr-4"></i>
+       <hr>
+       <h3>Usługi doradzcze</h3>
+       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+         hic dignissimos ratione ea quae.</p>
+     </div>
+     <div class="col-md-4">
+       <i class="fas fa-home fa-4x mr-4"></i>
+       <hr>
+       <h3>Zarządzanie nieruchomościami</h3>
+       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+         hic dignissimos ratione ea quae.</p>
+     </div>
+     <div class="col-md-4">
+       <i class="fas fa-suitcase fa-4x mr-4"></i>
+       <hr>
+       <h3>Wynajem / Sprzedaż </h3>
+       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+         hic dignissimos ratione ea quae.</p>
+     </div>
+   </div>
+ </div>
+</section>
+{% endblock %}
